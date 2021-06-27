@@ -1,5 +1,5 @@
 # GridSampler README - Grid sampling with python
-This repository contains a collection of python scripts and examples related to various mesh grid sampling methods. All code is fairly well documented but is under development and has had limited testing - procede with caution! See the development document for more details on the current development. 
+This repository contains a collection of python scripts and examples related to various mesh grid sampling methods. All code is fairly well documented but is under development and has had limited testing - procede with caution! See the development document for more details on the current development. Updated: June 27, 2021.
 
 ## Grid sampler module - grid.py
 This module contains two custom classes as well as many helper functions to aid in the creation and manipulation of mesh grids. In short, the full parameter space is discretized into a set of grid points which serve as seed points for future sampling.  Support for batching and HPC is in progress.
@@ -29,4 +29,4 @@ Usage:
 ## [Under heavy development] Adaptive grid sampler example - 2d_adaptive_example.py
 Overview: This example script generates and resamples from a simple 2d exponential decay model using the grid sampler and adaptive grid sampler module. First the model f(theta) is defined and synthetic data is generated with Gaussian noise. A bounded parameter space is created from domain knowledge and is turned into a discrete randomized mesh grid determined by user set hyperparameters. This mesh grid then follows the adaptive procedure briefly described above - resulting in a final set of densely packed grid points near the high probability regions with all data included. 
 
--August George, Zuckerman Lab, OHSU, 2021
+*August George, Zuckerman Lab, OHSU*
