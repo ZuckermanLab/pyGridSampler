@@ -1,5 +1,6 @@
 # Development
 Notes and to-do items for the projects in this repository.
+Updated: June 27, 2021.
 
 ## Grid sampler module - grid.py
 Mostly stable but needs unit tests and batching to be verified
@@ -25,7 +26,7 @@ Should add example for multiple batches
 
 
 ## [Under heavy development] Adaptive grid sampler module - agrid.py 
-Not very stable, only testing on a single example and it was very slow. 
+Not very stable, only tested on a single example and it was very slow. 
 * known issues:
     * **poor performance - need to fix collision detection and try to avoid the loops in Pandas**
     * need a boundary check during expansion (might be ok because of 'padding' that is added to each side of the parameter space)
@@ -45,3 +46,5 @@ Not very stable, only testing on a single example and it was very slow.
 
 ## [Under heavy development] Adaptive grid sampler example - 2d_adaptive_example.py
 Extremely slow for a toy 2d example. See above. 
+
+- August George, Zuckerman Lab, OHSU. 
