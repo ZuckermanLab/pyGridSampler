@@ -47,4 +47,5 @@ Not very stable, only tested on a single example and it was very slow.
 ## [Under heavy development] Adaptive grid sampler example - 2d_adaptive_example.py
 Extremely slow for a toy 2d example. See above. 
 
-- August George, Zuckerman Lab, OHSU. 
+
+August George, Zuckerman Lab, OHSU. 
