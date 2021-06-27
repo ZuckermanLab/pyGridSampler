@@ -28,7 +28,7 @@ Should add example for multiple batches
 ## [Under heavy development] Adaptive grid sampler module - agrid.py 
 Not very stable, only tested on a single example and it was very slow. 
 * known issues:
-    * **poor performance - need to fix collision detection and try to avoid the loops in Pandas**
+    * **poor performance - need to fix collision detection and try to avoid the loops in Pandas. Should do profiler check!**
     * need a boundary check during expansion (might be ok because of 'padding' that is added to each side of the parameter space)
     * during initialization the grid keeps randomly generating grid points until they are within the boundaries - should find a better way
     * collion detection - alphabetical string lists might be better than the sets
