@@ -48,4 +48,4 @@ Not very stable, only tested on a single example and it was very slow.
 Extremely slow for a toy 2d example. See above. 
 
 
-*August George, Zuckerman Lab, OHSU. *
+*August George, Zuckerman Lab, OHSU*
