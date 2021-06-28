@@ -1,4 +1,4 @@
-import grid as g
+import pygrid as g
 import numpy as np
 import datetime
 import logging
@@ -22,7 +22,7 @@ def model(p):
     k2 = p[1]
     y0 = 1
     t = np.linspace(0, 10, 100)
-    y = y0*np.exp(-(k1+k2)*t)
+    y = k1*np.exp(-(k2)*t)
     return y
 
 
@@ -55,19 +55,34 @@ logging.info(f' y_obs: {y_obs}\n')
 # generate parameter vectors
 logging.info(f'generating parameter vectors')
 n_p_div = 5
-p1 = g.ParameterVector('k_1', 0, 4, n_p_div)
-p2 = g.ParameterVector('k_2', 6, 10, n_p_div)
-p3 = g.ParameterVector('sigma', 0.1, 1, n_p_div)
+p1 = g.ParameterVector('k_1', 0, 4, n_p_div, 1)  # add padding
+p2 = g.ParameterVector('k_2', 6, 10, n_p_div, 1)
+p3 = g.ParameterVector('sigma', 0.1, 1, n_p_div, 0.1)
 p_list = [p1, p2, p3]
 print_parameter_vectors(p_list)
 
 # generate mesh grid
 logging.info(f'generating mesh grid')
-grid = g.Grid(p_list)
+grid = g.MeshGrid(p_list)
 _, _ = grid.mesh_grid(grid.p_vectors)  # create initial grid
 grid_seed = 1234
 logging.info(f' randomizing grid using seed {grid_seed}')
-mg, mg_df = grid.randomize_grid(seed=grid_seed)
+
+
+# FIX this! - find a better way to check boundary
+b_err = True
+i = 0
+while b_err is True:
+    try:
+        mg, mg_df = grid.randomize_grid(seed=grid_seed+i)  # randomize grid
+    except:
+        b_err = True
+        i = i + 1
+    else:
+        b_err = False
+        grid_seed = grid_seed + i  # keep new seed for future randomization calls
+
+#mg, mg_df = grid.randomize_grid(seed=grid_seed)
 logging.info(f' randomized parameter values:')
 print_parameter_vectors(grid.p_list)  # different now from initial parameter vectors
 logging.info(f' max logl observed, logl(x=y_obs | mu=y_obs, sigma=sigma_true): {g.calc_logl(y_obs,y_obs,p_true[-1])}\n')
