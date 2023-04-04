@@ -1,6 +1,7 @@
 import numpy as np
 from multiprocessing import Pool
 import matplotlib.pyplot as plt
+import pandas as pd
 
 
 def get_marginals_from_grid(grid):
@@ -155,14 +156,39 @@ def add_grid_points(grid, x_bounds, x_shifts, x_spacing):
     Note:
         Newly added points need to be checked for a boundary error, with ~O(nlogn) time complexity
     """
+    # expansion_list = [grid]
+    # for x_shift in x_shifts:
+    #     expansion_i = grid + np.array(x_shift)*np.array(x_spacing)  # x_neighbor = x_direction*dx
+    #     expansion_list.append(expansion_i)
+    # print(expansion_list)
+    # expanded_grid = np.vstack(expansion_list)
+    # print(expanded_grid)
+    # expanded_grid = np.unique(expanded_grid, axis=0) # remove duplicates ~O(nlogn)
+    # print(expanded_grid)
+    # expanded_grid = check_grid_boundary(expanded_grid, x_bounds)
+    # print(expanded_grid)
+    # return expanded_grid
+    print(grid)
     expansion_list = [grid]
     for x_shift in x_shifts:
+        
         expansion_i = grid + np.array(x_shift)*np.array(x_spacing)  # x_neighbor = x_direction*dx
-        expansion_i = np.unique(expansion_i, axis=0)  # remove duplicates ~O(nlogn)
+       
         expansion_list.append(expansion_i)
-    expanded_grid = np.vstack(expansion_list)
-    expanded_grid = check_grid_boundary(np.vstack(expansion_list), x_bounds)
+   
+    expanded_grid = np.vstack(expansion_list) 
+    print(expanded_grid) 
+    
+    # Use pandas to remove duplicates
+    df = pd.DataFrame(expanded_grid)
+    df = df.drop_duplicates().values
+    print(df)
+    
+    # Check for boundary error and return the final array
+    expanded_grid = check_grid_boundary(df, x_bounds)
+    print(expanded_grid)
     return expanded_grid
+    
 
 
 def calc_rel_logp(logp):

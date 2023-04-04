@@ -1,4 +1,4 @@
-import grid_tools as gt
+from pyGridSampler import grid_tools as gt
 import numpy as np
 from tqdm import tqdm
 
