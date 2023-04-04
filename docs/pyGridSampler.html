@@ -46,11 +46,13 @@ pyGridSampler    </h1>
 
 <p>example usage:</p>
 
-<pre><code>import GridSampler as gs
+<div class="pdoc-code codehilite">
+<pre><span></span><code><span class="kn">import</span> <span class="nn">GridSampler</span> <span class="k">as</span> <span class="nn">gs</span>
 
-sampler = gs.GridSampler(log_prob_func, func_args, data, x_bounds, x_extension)
-results = sampler.initialize_and_sample(init_grid_resolution, init_data_size, ess_min, delta, n_processes=4, max_iter=100)
+<span class="n">sampler</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">GridSampler</span><span class="p">(</span><span class="n">log_prob_func</span><span class="p">,</span> <span class="n">func_args</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">x_bounds</span><span class="p">,</span> <span class="n">x_extension</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">initialize_and_sample</span><span class="p">(</span><span class="n">init_grid_resolution</span><span class="p">,</span> <span class="n">init_data_size</span><span class="p">,</span> <span class="n">ess_min</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">n_processes</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 </code></pre>
+</div>
 </div>
 
                         <input id="mod-pyGridSampler-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
@@ -61,7 +63,7 @@ results = sampler.initialize_and_sample(init_grid_resolution, init_data_size, es
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="sd">PyGridSampler is a package for adaptive grid sampling using data-tempering</span>
 </span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
 </span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="sd">example usage:</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="sd">```</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="sd">```python</span>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="sd">import GridSampler as gs</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">sampler = gs.GridSampler(log_prob_func, func_args, data, x_bounds, x_extension)</span>
