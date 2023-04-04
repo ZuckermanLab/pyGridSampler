@@ -65,7 +65,7 @@ if __name__ == "__main__":
     np.random.seed(0)
     k_true = 5
     sigma_true = 0.5
-    t_full = np.linspace(0, 2, 10)
+    t_full = np.linspace(0, 2, 100)
 
     y_true= 50*np.exp(-k_true*t_full)
     x_truths = [k_true, sigma_true]
@@ -88,7 +88,7 @@ if __name__ == "__main__":
     args_list = create_tempering_list([y_obs, t_full])
     
     init_data_size = 2 # use 2 data points initially
-    init_grid_resolution = 100 # 20 points per parameter -> total grid size 20^n_dim points
+    init_grid_resolution = 200 # n points per parameter -> total grid size =  n^n_dim points
     ess_min = 1000  # target effective size threshold. larger ess_min --> denser grid 
     delta = 0.05 # keep smallest set of grid points whose weights sum to 1-delta. larger delta --> remove more gridpoints
 

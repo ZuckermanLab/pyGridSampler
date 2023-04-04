@@ -105,9 +105,8 @@ class GridSampler:
         grid_resolution, data_size, grid, x_spacing, log_likelihoods, rel_prob, weights, ess = self.initialize(init_grid_resolution, init_data_size, ess_min, n_processes, max_iter)
         
         # remove low probability samples
-        print(f'size before reduction: {np.shape(grid)[0]}')
         grid = gt.reduce_grid_points(grid,weights,delta) 
-        print(f'size after reduction: {np.shape(grid)[0]}')
+     
 
         # iterate through remaining data (i.e. data tempering)
         data_tempering_index = data_size-1
@@ -116,24 +115,21 @@ class GridSampler:
             data_tempering_index = i+1  
             args = self.args_list[data_tempering_index]
 
-            print(f'size before addition: {np.shape(grid)[0]}')
             #x_spacing = gt.update_x_spacing(x_spacing,2)  # reduce spacing by 2
             grid = gt.add_grid_points(grid, self.x_bounds, self.x_shifts, x_spacing)  # expand and pack
             log_likelihoods, rel_prob, weights, ess = gt.eval_grid_points(grid, self.func, args, n_processes) 
-            print(f'size after addition: {np.shape(grid)[0]}')
     
             # ensure ess is high enough for added datapoint
             iter = 0
             while ess<ess_min and iter < max_iter:
+                print(f'refining')
                 x_spacing = gt.update_x_spacing(x_spacing,2)  # make grid spacing finer by 2x
                 grid = gt.add_grid_points(grid, self.x_bounds, self.x_shifts, x_spacing)  # expand and pack
                 log_likelihoods, rel_prob, weights, ess = gt.eval_grid_points(grid, self.func, args, n_processes) 
                 iter = iter + 1      
             
             # remove low probability grid points
-            print(f'size before reduction: {np.shape(grid)[0]}')
             grid = gt.reduce_grid_points(grid,weights,delta)
-            print(f'size after reduction: {np.shape(grid)[0]}')
             pbar.set_description(f"Processing: data_size={data_tempering_index+1}, grid_resolution={grid_resolution}, n_grid_points={np.shape(grid)[0]}, ESS={ess}")
         return  grid_resolution, data_size, grid, x_spacing, log_likelihoods, rel_prob, weights, ess 
 
