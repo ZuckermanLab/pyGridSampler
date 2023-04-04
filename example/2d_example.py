@@ -1,9 +1,12 @@
-import grid_sampler as gs
-import grid_tools as gt
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
-
+import sys 
+import os
+parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, parent_dir)
+from pyGridSampler import grid_sampler as gs
+from pyGridSampler import grid_tools as gt
 
 def plot_2d_grid(grid, x1_bounds, x2_bounds,fname, x1_true=3, x2_true=5):
     # reduce grid  

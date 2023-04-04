@@ -168,7 +168,7 @@ def add_grid_points(grid, x_bounds, x_shifts, x_spacing):
     # expanded_grid = check_grid_boundary(expanded_grid, x_bounds)
     # print(expanded_grid)
     # return expanded_grid
-    print(grid)
+    
     expansion_list = [grid]
     for x_shift in x_shifts:
         
@@ -177,18 +177,22 @@ def add_grid_points(grid, x_bounds, x_shifts, x_spacing):
         expansion_list.append(expansion_i)
    
     expanded_grid = np.vstack(expansion_list) 
-    print(expanded_grid) 
+ 
     
-    # Use pandas to remove duplicates
-    df = pd.DataFrame(expanded_grid)
-    df = df.drop_duplicates().values
-    print(df)
+
+    # Round values to a specific precision to avoid floating-point errors
+    precision = 10
+    expanded_grid_rounded = np.round(expanded_grid, precision)
+
+    # Use np.unique with 
+    unique_expanded_grid_rounded = np.unique(expanded_grid_rounded, axis=0)
     
+    # Convert the rounded values back to the original precision
+    unique_expanded_grid = np.round(unique_expanded_grid_rounded, precision)
+
     # Check for boundary error and return the final array
-    expanded_grid = check_grid_boundary(df, x_bounds)
-    print(expanded_grid)
+    expanded_grid = check_grid_boundary(unique_expanded_grid, x_bounds)
     return expanded_grid
-    
 
 
 def calc_rel_logp(logp):
