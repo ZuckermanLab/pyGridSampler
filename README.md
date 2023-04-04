@@ -1,4 +1,4 @@
-# GridSampler README - Grid sampling with python
+# Grid sampling with python
 
 
 *August George, Zuckerman Lab, OHSU*
