@@ -50,7 +50,7 @@ pyGridSampler    </h1>
 <pre><span></span><code><span class="kn">import</span> <span class="nn">GridSampler</span> <span class="k">as</span> <span class="nn">gs</span>
 
 <span class="n">sampler</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">GridSampler</span><span class="p">(</span><span class="n">log_prob_func</span><span class="p">,</span> <span class="n">func_args</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">x_bounds</span><span class="p">,</span> <span class="n">x_extension</span><span class="p">)</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">initialize_and_sample</span><span class="p">(</span><span class="n">init_grid_resolution</span><span class="p">,</span> <span class="n">init_data_size</span><span class="p">,</span> <span class="n">ess_min</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">n_processes</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">initialize_and_sample</span><span class="p">(</span><span class="n">grid_resolution</span><span class="p">,</span> <span class="n">data_size</span><span class="p">,</span> <span class="n">ess_min</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span>
 </code></pre>
 </div>
 </div>
@@ -67,7 +67,7 @@ pyGridSampler    </h1>
 </span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="sd">import GridSampler as gs</span>
 </span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
 </span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">sampler = gs.GridSampler(log_prob_func, func_args, data, x_bounds, x_extension)</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">results = sampler.initialize_and_sample(init_grid_resolution, init_data_size, ess_min, delta, n_processes=4, max_iter=100)</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">results = sampler.initialize_and_sample(grid_resolution, data_size, ess_min, delta)</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">```</span>
 </span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
 </span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">&#39;&#39;&#39;</span>
