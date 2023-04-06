@@ -10,7 +10,7 @@ import GridSampler as gs
 sampler = gs.GridSampler(log_prob_func, func_args, data, x_bounds, x_extension)
 results = sampler.initialize_and_sample(grid_resolution, data_size, ess_min, delta)
 ```
-see example notebook and [docs].
+see example notebook and [Docs](https://zuckermanlab.github.io/pyGridSampler/pyGridSampler.html).
 
 
 Preprint (please cite):
