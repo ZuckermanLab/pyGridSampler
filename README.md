@@ -1,4 +1,5 @@
 # Grid sampling with python
+[![Tests](https://github.com/ZuckermanLab/pyGridSampler/actions/workflows/python-package.yml/badge.svg)](https://github.com/ZuckermanLab/pyGridSampler/actions/workflows/python-package.yml)
 
 Evaluate log-likelihood and log-posterior surfaces using an adaptive grid and iterative batch sizes. 
 
