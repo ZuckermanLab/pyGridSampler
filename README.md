@@ -4,6 +4,7 @@
 
 Evaluate log-likelihood and log-posterior surfaces using an adaptive multigrid and iterative batch sizes. 
 
+
 Getting started:
 
 ```
