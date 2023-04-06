@@ -77,7 +77,7 @@ class GridSampler:
         return grid_resolution, data_tempering_index+1, grid, x_spacing, log_likelihoods, rel_prob, weights, ess
 
     def initialize_and_sample(self, init_grid_resolution, init_data_size, ess_min, delta, n_processes=4, max_iter=100, store_grid=False):
-        """ Initializes the grid and performs the data tempering to obtain posterior samples.
+        """ Initializes the grid and performs the data tempering (iterative batching) to obtain posterior samples.
 
         Args:
             init_grid_resolution (int): The resolution of the initial grid.
