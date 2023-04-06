@@ -2,7 +2,7 @@
 [![Tests](https://github.com/ZuckermanLab/pyGridSampler/actions/workflows/python-package.yml/badge.svg)](https://github.com/ZuckermanLab/pyGridSampler/actions/workflows/python-package.yml)
 [![Docs](https://github.com/ZuckermanLab/pyGridSampler/actions/workflows/setup-docs.yml/badge.svg)](https://github.com/ZuckermanLab/pyGridSampler/actions/workflows/setup-docs.yml)
 
-Evaluate log-likelihood and log-posterior surfaces using an adaptive grid and iterative batch sizes. 
+Evaluate log-likelihood and log-posterior surfaces using an adaptive multigrid and iterative batch sizes. 
 
 Getting started:
 
