@@ -2,10 +2,8 @@ import numpy as np
 from tqdm import tqdm
 import sys 
 import os
-parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, parent_dir)
+import pyGridSampler.grid_tools as gt
 
-from pyGridSampler import grid_tools as gt
 
 class GridSampler:
     """Class for sampling grids using an adaptive data-tempering algorithm.
@@ -24,6 +22,8 @@ class GridSampler:
         self.x_shifts = x_shifts
         self.n_dim = len(x_bounds)
         self.n_data_points = len(dataset)
+        self.output = []
+        
 
     def calc_naive_grid(self, grid_resolution, data_tempering_index, n_processes=4):
         """Exhaustively calculate the log-likelihoods, relative probabilities, weights and effective sample size (ESS) for a given grid resolution.
@@ -76,7 +76,7 @@ class GridSampler:
                 pbar.set_description(f"Intialization: data_size={data_tempering_index+1}, grid_resolution={grid_resolution}, n_grid_points={np.shape(grid)[0]}, ESS={ess}")
         return grid_resolution, data_tempering_index+1, grid, x_spacing, log_likelihoods, rel_prob, weights, ess
 
-    def initialize_and_sample(self, init_grid_resolution, init_data_size, ess_min, delta, n_processes=4, max_iter=100):
+    def initialize_and_sample(self, init_grid_resolution, init_data_size, ess_min, delta, n_processes=4, max_iter=100, store_grid=False):
         """ Initializes the grid and performs the data tempering to obtain posterior samples.
 
         Args:
@@ -88,6 +88,8 @@ class GridSampler:
                 Defaults to 4.
             max_iter (int, optional): The maximum number of iterations for updating the grid.
                 Defaults to 100.
+            store_grid (bool, optional): Stores reduced grid at each tempering stage (may use a lot of memory for large grids / datasets)
+                Defaults to False.
 
         Returns:
             Tuple[int, int, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, float]: A tuple containing the following elements:
@@ -103,10 +105,27 @@ class GridSampler:
         
         # generate initial (uniform) grid samples
         grid_resolution, data_size, grid, x_spacing, log_likelihoods, rel_prob, weights, ess = self.initialize(init_grid_resolution, init_data_size, ess_min, n_processes, max_iter)
-        
-        # remove low probability samples
-        grid = gt.reduce_grid_points(grid,weights,delta) 
-     
+        # gt.plot_2d_scatter(grid, 
+        #                    f"initial grid: {data_size} data points, {np.shape(grid)[0]} grid point",
+        #                    r'$x_1$',
+        #                    r'$x_2$',
+        #                    self.x_bounds[0], 
+        #                    self.x_bounds[1],
+        #                    5, 
+        #                    0.1,
+        #                    "initial_grid.png"
+        #                    )
+        # # remove low probability samples
+        # gt.plot_2d_scatter(grid, 
+        #             f"initial grid reduced: {data_size} data points, {np.shape(grid)[0]} grid point",
+        #             r'$x_1$',
+        #             r'$x_2$',
+        #             self.x_bounds[0], 
+        #             self.x_bounds[1],
+        #             5, 
+        #             0.1,
+        #             "initial_grid_reduced.png"
+        #             )
 
         # iterate through remaining data (i.e. data tempering)
         data_tempering_index = data_size-1
@@ -114,23 +133,55 @@ class GridSampler:
         for i in pbar:
             data_tempering_index = i+1  
             args = self.args_list[data_tempering_index]
-
-            #x_spacing = gt.update_x_spacing(x_spacing,2)  # reduce spacing by 2
-            grid = gt.add_grid_points(grid, self.x_bounds, self.x_shifts, x_spacing)  # expand and pack
+            grid = gt.add_grid_points(grid, self.x_bounds, self.x_shifts, x_spacing)  # expand 
             log_likelihoods, rel_prob, weights, ess = gt.eval_grid_points(grid, self.func, args, n_processes) 
+            # gt.plot_2d_scatter(grid, 
+            #                     f"expanded grid: {data_tempering_index+1} data points, {np.shape(grid)[0]} grid points",
+            #                     r'$x_1$',
+            #                     r'$x_2$',
+            #                     self.x_bounds[0], 
+            #                     self.x_bounds[1],
+            #                     5, 
+            #                     0.1,
+            #                     f"expanded_grid_{i}.png"
+            #                     )
     
-            # ensure ess is high enough for added datapoint
+            # ensure ess is high enough for added datapoint, if not, make grid finer
             iter = 0
             while ess<ess_min and iter < max_iter:
-                print(f'refining')
+                prev_x_spacing = x_spacing
                 x_spacing = gt.update_x_spacing(x_spacing,2)  # make grid spacing finer by 2x
-                grid = gt.add_grid_points(grid, self.x_bounds, self.x_shifts, x_spacing)  # expand and pack
+                grid = gt.add_grid_points(grid, self.x_bounds, self.x_shifts, x_spacing, prev_x_spacing)  # expand and pack
                 log_likelihoods, rel_prob, weights, ess = gt.eval_grid_points(grid, self.func, args, n_processes) 
-                iter = iter + 1      
-            
-            # remove low probability grid points
+                iter = iter + 1  
+                # gt.plot_2d_scatter(grid, 
+                #         f"packed grid: {data_tempering_index+1} data points, {np.shape(grid)[0]} grid points",
+                #         r'$x_1$',
+                #         r'$x_2$',
+                #         self.x_bounds[0], 
+                #         self.x_bounds[1],
+                #         5, 
+                #         0.1,
+                #         f"packed_grid_{i}_{iter}.png"
+                #         )        
+     
             grid = gt.reduce_grid_points(grid,weights,delta)
-            pbar.set_description(f"Processing: data_size={data_tempering_index+1}, grid_resolution={grid_resolution}, n_grid_points={np.shape(grid)[0]}, ESS={ess}")
+            # gt.plot_2d_scatter(grid, 
+            #                     f"reduced grid: {data_tempering_index+1} data points, {np.shape(grid)[0]} grid points",
+            #                     r'$x_1$',
+            #                     r'$x_2$',
+            #                     self.x_bounds[0], 
+            #                     self.x_bounds[1],
+            #                     5, 
+            #                     0.1,
+            #                     f"reduced_grid_{i}.png"
+            #                     )
+            # self.output.append(grid)
+            if store_grid:
+                self.output.append(grid)
+     
+            pbar.set_description(f"Processing: data_size={data_tempering_index+1}, n_grid_points={np.shape(grid)[0]}, ESS={ess}")
         return  grid_resolution, data_size, grid, x_spacing, log_likelihoods, rel_prob, weights, ess 
 
+   
 

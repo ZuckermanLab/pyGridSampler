@@ -4,8 +4,7 @@ from multiprocessing import cpu_count
 import sys
 import os
 
-parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, parent_dir)
+sys.path.insert(0,  os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from pyGridSampler import grid_sampler as gs
 from pyGridSampler import grid_tools as gt
 
@@ -302,6 +301,33 @@ class TestGridSampler(unittest.TestCase):
 
         # check that the ess is greater than 0
         self.assertGreater(ess, 0)
+
+
+def test_add_grid_points(self):
+    grid = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+    x_bounds = np.array([[-0.5, 1.5], [-0.5, 1.5]])
+    x_shifts = np.array([[-1, 0], [1, 0], [0, -1], [0, 1]])
+    x_spacing = np.array([0.5, 0.5])
+
+    expanded_grid = gt.add_grid_points(grid, x_bounds, x_shifts, x_spacing)
+    expected_expanded_grid = np.array([
+        [0, 0], [0, 1], [1, 0], [1, 1],
+        [-0.5, 0], [1.5, 0], [0, -0.5], [1, -0.5],
+        [0, 1.5], [1, 1.5], [-0.5, 1], [1.5, 1],
+    ])
+
+    sorted_expanded_grid = np.sort(expanded_grid, axis=0)
+    sorted_expected_exp_array = np.sort(expected_expanded_grid, axis=0)
+    same_number_of_points = len(sorted_expanded_grid) == len(sorted_expected_exp_array)
+
+    if same_number_of_points:
+        grid_diff = np.abs(sorted_expanded_grid - sorted_expected_exp_array)
+        points_match = np.sum(grid_diff) == 0
+    else:
+        points_match = False
+
+    self.assertTrue(points_match)
+
 
 
 

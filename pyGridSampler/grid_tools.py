@@ -1,7 +1,7 @@
 import numpy as np
 from multiprocessing import Pool
 import matplotlib.pyplot as plt
-import pandas as pd
+from scipy.spatial import KDTree
 
 
 def get_marginals_from_grid(grid):
@@ -78,7 +78,7 @@ def gen_grid_points(n_dim, x_bounds, grid_resolution):
         Tuple[np.ndarray, List[float]]: A tuple containing the grid of points (as a numpy array with shape (n_points, n_dim)) and the spacing between the points along each dimension.
     """
     x_points = [np.linspace(bound[0], bound[1], grid_resolution) for bound in x_bounds] 
-    x_spacing = [np.abs(x[1]-x[0]) for x in x_points]
+    x_spacing = [(bound[1] - bound[0]) / (grid_resolution - 1) for bound in x_bounds]
     initial_grid = np.array(np.meshgrid(*x_points)).T.reshape(-1,n_dim)
     return initial_grid, x_spacing
 
@@ -140,59 +140,77 @@ def check_grid_boundary(grid, x_bounds):
     return updated_grid
 
 
-def add_grid_points(grid, x_bounds, x_shifts, x_spacing):
+def add_grid_points(grid, x_bounds, x_shifts, x_spacing, prev_x_spacing=None):
     """
-    Adds new points to the grid by expanding it with neighboring points based on a shift vector and shift amount.
+    Add new grid points to the existing grid based on spacing, shifts, and boundaries.
+
+    This function expands the grid by adding new grid points shifted by x_shifts and
+    x_spacing, making sure that the new points are within the x_bounds and not too close
+    to existing points or other new points being added.
 
     Args:
-        grid (np.ndarray): 2D array containing the coordinates of the existing grid points.
-        x_bounds (List[Tuple[float, float]]): List of tuples containing the lower and upper bounds for each coordinate of the grid.
-        x_shifts (List[Tuple[int, ...]]): List of tuples containing the shift vector for each new neighbor point. The length of the tuple should be equal to the number of dimensions in the grid.
-        x_spacing (List[float]): List of spacing values for each coordinate of the grid.
+        grid (array-like): The initial grid of points (n_points, n_dim).
+        x_bounds (array-like): The lower and upper bounds for each dimension (n_dim, 2).
+        x_shifts (array-like): The possible shift directions (n_shifts, n_dim).
+        x_spacing (array-like): The spacing in each dimension (n_dim,).
+        prev_x_spacing (array-like, optional): The previous grid spacing in each dimension (n_dim,).
+            Default is None.
 
     Returns:
-        np.ndarray: array containing the old and new grid points.
-
-    Note:
-        Newly added points need to be checked for a boundary error, with ~O(nlogn) time complexity
+        array-like: The expanded grid with new points added (n_points + n_added_points, n_dim).
     """
-    # expansion_list = [grid]
-    # for x_shift in x_shifts:
-    #     expansion_i = grid + np.array(x_shift)*np.array(x_spacing)  # x_neighbor = x_direction*dx
-    #     expansion_list.append(expansion_i)
-    # print(expansion_list)
-    # expanded_grid = np.vstack(expansion_list)
-    # print(expanded_grid)
-    # expanded_grid = np.unique(expanded_grid, axis=0) # remove duplicates ~O(nlogn)
-    # print(expanded_grid)
-    # expanded_grid = check_grid_boundary(expanded_grid, x_bounds)
-    # print(expanded_grid)
-    # return expanded_grid
-    
-    expansion_list = [grid]
-    for x_shift in x_shifts:
-        
-        expansion_i = grid + np.array(x_shift)*np.array(x_spacing)  # x_neighbor = x_direction*dx
-       
-        expansion_list.append(expansion_i)
-   
-    expanded_grid = np.vstack(expansion_list) 
- 
-    
+    kdtree = KDTree(grid)
+    if prev_x_spacing is not None and prev_x_spacing == x_spacing:
+        min_dist_fraction = 0.5
+        min_dist = min_dist_fraction * min(x_spacing)
+    else:
+        min_dist_fraction = 0.25
+        min_dist = min_dist_fraction * min(x_spacing)
+    expanded_points = []
+    added_points = []
+    for point in grid:
+        for shift in x_shifts:
+            shifted_point = point + np.array(shift) * np.array(x_spacing)
+            
+            if not check_grid_point_boundary(shifted_point, x_bounds):
+                continue
+            
+            dist, _ = kdtree.query(shifted_point)
+            if dist > min_dist:
+                if len(added_points) > 0:
+                    added_tree = KDTree(added_points)
+                    added_dist, _ = added_tree.query(shifted_point)
+                    if added_dist < min_dist:
+                        continue
+                
+                expanded_points.append(tuple(shifted_point))
+                added_points.append(shifted_point)
 
-    # Round values to a specific precision to avoid floating-point errors
-    precision = 10
-    expanded_grid_rounded = np.round(expanded_grid, precision)
-
-    # Use np.unique with 
-    unique_expanded_grid_rounded = np.unique(expanded_grid_rounded, axis=0)
-    
-    # Convert the rounded values back to the original precision
-    unique_expanded_grid = np.round(unique_expanded_grid_rounded, precision)
-
-    # Check for boundary error and return the final array
-    expanded_grid = check_grid_boundary(unique_expanded_grid, x_bounds)
+    if len(expanded_points) == 0:
+        expanded_grid = grid
+    else:
+        expanded_points = np.array(expanded_points)
+        expanded_grid = np.vstack((grid, expanded_points))
     return expanded_grid
+
+
+def check_grid_point_boundary(point, x_bounds):
+    """
+    Check if a given point is within the specified boundaries.
+
+    Args:
+        point (array-like): The point to be checked (n_dim,).
+        x_bounds (array-like): The lower and upper bounds for each dimension (n_dim, 2).
+
+    Returns:
+        bool: True if the point is within the bounds, False otherwise.
+    """
+    n_dim = len(x_bounds)
+    in_bounds = True
+    for i in range(n_dim):
+        lb, ub = x_bounds[i]
+        in_bounds &= (point[i] >= lb) & (point[i] <= ub)
+    return in_bounds
 
 
 def calc_rel_logp(logp):
@@ -296,3 +314,37 @@ def get_sorted_sublists_from_idx(idx_sublist, x):
     """
     x_sublist = [x[i] for i in idx_sublist]
     return x_sublist
+
+def plot_2d_scatter(grid_xy, title, x_label, y_label, x_lim, y_lim, x_true, y_true, fname=[]):
+    """Plots a 2D scatter plot of the grid results.
+
+    Args:
+        grid_xy (List[Tuple[float, float]]): The coordinates of the grid points.
+        title (str): The title of the plot.
+        x_label (str): The label for the x-axis.
+        y_label (str): The label for the y-axis.
+        x_lim (Tuple[float, float]): The limits for the x-axis.
+        y_lim (Tuple[float, float]): The limits for the y-axis.
+        x_true (float): The true x value.
+        y_true (float): The true y value.
+        fname (str): The file name to save the plot as. Default is empty (not saved)
+
+    Returns:
+        matplotlib.figure.Figure: The matplotlib figure object.
+    """
+    fig = plt.figure(figsize=(10,7))
+    plt.title(title)
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+    plt.xlim(x_lim)
+    plt.ylim(y_lim)
+    y = [x[1] for x in grid_xy]
+    x = [x[0] for x in grid_xy]
+    plt.scatter(x,y, alpha=0.45, s=1, color='black')
+    plt.axvline(x=x_true, color='black', linestyle='--')
+    plt.axhline(y=y_true, color='black', linestyle='--')
+    plt.tight_layout()
+    if fname:
+        plt.savefig(fname)
+    return fig
+
