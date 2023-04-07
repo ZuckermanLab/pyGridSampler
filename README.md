@@ -1,4 +1,4 @@
-# Grid sampling with python
+# Adaptive multi-grid sampling with python
 [![Tests](https://github.com/ZuckermanLab/pyGridSampler/actions/workflows/python-package.yml/badge.svg)](https://github.com/ZuckermanLab/pyGridSampler/actions/workflows/python-package.yml)
 [![Docs](https://github.com/ZuckermanLab/pyGridSampler/actions/workflows/setup-docs.yml/badge.svg)](https://github.com/ZuckermanLab/pyGridSampler/actions/workflows/setup-docs.yml)
 
