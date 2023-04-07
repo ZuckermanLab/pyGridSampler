@@ -1,0 +1,4 @@
+include example/*
+include pyGridSampler/*
+include readme.md
+include requirements.txt
