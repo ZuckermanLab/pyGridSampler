@@ -58,7 +58,7 @@ pyGridSampler    </h1>
 </div>
 
 <div class="pdoc-code codehilite">
-<pre><span></span><code><span class="kn">import</span> <span class="nn">GridSampler</span> <span class="k">as</span> <span class="nn">gs</span>
+<pre><span></span><code><span class="kn">import</span> <span class="nn">pygridsampler.grid_sampler</span> <span class="k">as</span> <span class="nn">gs</span>
 
 <span class="n">sampler</span> <span class="o">=</span> <span class="n">gs</span><span class="o">.</span><span class="n">GridSampler</span><span class="p">(</span><span class="n">log_prob_func</span><span class="p">,</span> <span class="n">func_args</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">x_bounds</span><span class="p">,</span> <span class="n">x_extension</span><span class="p">)</span>
 <span class="n">results</span> <span class="o">=</span> <span class="n">sampler</span><span class="o">.</span><span class="n">initialize_and_sample</span><span class="p">(</span><span class="n">grid_resolution</span><span class="p">,</span> <span class="n">data_size</span><span class="p">,</span> <span class="n">ess_min</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span>
@@ -85,7 +85,7 @@ pyGridSampler    </h1>
 </span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">```</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
 </span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="sd">```python</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">import GridSampler as gs</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">import pygridsampler.grid_sampler as gs</span>
 </span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>
 </span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="sd">sampler = gs.GridSampler(log_prob_func, func_args, data, x_bounds, x_extension)</span>
 </span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="sd">results = sampler.initialize_and_sample(grid_resolution, data_size, ess_min, delta)</span>
