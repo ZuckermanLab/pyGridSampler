@@ -8,6 +8,10 @@ The package also comes with utility functions for efficiently creating and evalu
 ![grid animation](https://raw.githubusercontent.com/ZuckermanLab/pyGridSampler/main/docs/animation_test.gif)
 
 example usage:
+```bash
+pip install pyGridsampler
+```
+
 ```python
 import GridSampler as gs
 
