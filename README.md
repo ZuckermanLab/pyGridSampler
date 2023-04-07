@@ -15,7 +15,7 @@ pip install pyGridsampler
 ```
 
 ```
-import GridSampler as gs
+import pygridsampler.grid_sampler as gs
 
 sampler = gs.GridSampler(log_prob_func, func_args, data, x_bounds, x_extension)
 results = sampler.initialize_and_sample(grid_resolution, data_size, ess_min, delta)
