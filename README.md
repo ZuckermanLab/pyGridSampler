@@ -3,7 +3,10 @@
 [![Docs](https://github.com/ZuckermanLab/pyGridSampler/actions/workflows/setup-docs.yml/badge.svg)](https://github.com/ZuckermanLab/pyGridSampler/actions/workflows/setup-docs.yml)
 
 Evaluate log-likelihood and log-posterior surfaces using an adaptive multigrid and iterative batch sizes. 
+Also comes with utility functions for efficiently creating and evaluating meshgrids.
 
+
+![grab-landing-page](https://github.com/ZuckermanLab/pyGridSampler/blob/main/docs/animation_test.gif)
 
 Getting started:
 
