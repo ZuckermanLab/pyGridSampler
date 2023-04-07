@@ -1,5 +1,9 @@
 r'''
-PyGridSampler is a package for adaptive grid sampling using data-tempering
+PyGridSampler is a package for adaptive grid-based sampling method using iterative batch sizes.
+
+This method uses multi-grids at different data batch sizes to efficiently evaluate a function surface (e.g. log-likelihood).
+
+The package also comes with utility functions for efficiently creating and evaluating meshgrids.
 
 ![grid animation](https://raw.githubusercontent.com/ZuckermanLab/pyGridSampler/main/docs/animation_test.gif)
 
