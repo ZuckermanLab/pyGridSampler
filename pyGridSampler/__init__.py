@@ -1,7 +1,7 @@
 r'''
 PyGridSampler is a package for adaptive grid sampling using data-tempering
 
-![Alt Text](https://github.com/ZuckermanLab/pyGridSampler/blob/main/docs/animation_test.gif)
+![Alt Text](docs/animation_test.gif)
 
 example usage:
 ```python
