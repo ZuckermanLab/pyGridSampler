@@ -1,0 +1,17 @@
+LICENSE
+MANIFEST.in
+README.md
+readme.md
+requirements.txt
+setup.py
+example/2d_example.ipynb
+example/toy_model.py
+pyGridSampler/__init__.py
+pyGridSampler/grid_sampler.py
+pyGridSampler/grid_tools.py
+pyGridSampler.egg-info/PKG-INFO
+pyGridSampler.egg-info/SOURCES.txt
+pyGridSampler.egg-info/dependency_links.txt
+pyGridSampler.egg-info/requires.txt
+pyGridSampler.egg-info/top_level.txt
+tests/test_basic.py

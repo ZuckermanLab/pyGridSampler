@@ -1,0 +1,5 @@
+Metadata-Version: 2.1
+Name: pyGridSampler
+Version: 0.0.1
+Summary: Adaptive grid-based sampling with iterative batch sizes.
+License-File: LICENSE
