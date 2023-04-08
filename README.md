@@ -26,6 +26,5 @@ results = sampler.initialize_and_sample(grid_resolution, data_size, ess_min, del
 see [Docs](https://zuckermanlab.github.io/pyGridSampler/pyGridSampler.html) and [notebook](https://github.com/ZuckermanLab/pyGridSampler/blob/main/example/2d_example.ipynb)
 
 
-Preprint (please cite):
 
 *August George, Zuckerman Lab, OHSU, 2023*
