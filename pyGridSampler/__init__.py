@@ -7,11 +7,14 @@ The package also comes with utility functions for efficiently creating and evalu
 
 ![grid animation](https://raw.githubusercontent.com/ZuckermanLab/pyGridSampler/main/docs/animation_test.gif)
 
-example usage:
+### Getting started:
+
+install using pip:
 ```bash
-pip install pyGridsampler
+pip install pyGridSampler
 ```
 
+example usage:
 ```python
 import pygridsampler.grid_sampler as gs
 
