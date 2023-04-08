@@ -9,11 +9,14 @@ Also comes with utility functions for efficiently creating and evaluating meshgr
 
 ![grab-landing-page](https://github.com/ZuckermanLab/pyGridSampler/blob/main/docs/animation_test.gif)
 
-Getting started:
+### Getting started
+
+install using pip:
 ```
 pip install pyGridsampler
 ```
 
+example usage:
 ```
 import pygridsampler.grid_sampler as gs
 
